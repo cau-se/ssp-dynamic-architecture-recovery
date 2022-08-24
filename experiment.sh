@@ -48,14 +48,34 @@ checkFile project-file-template "${BASE_DIR}/.project.template"
 checkDirectory data-kieker-directory "${DATA_KIEKER_DIR}"
 
 #
-# run experiment
+# Prepare output
 #
 
-"${DAR_BIN}" -l dynamic -a "${ADDR2LINE_BIN}" -c -e  "${UVIC_BIN"} -o "${MODEL_FILE_DIR}" -s elf -m file-mode -E ssp -i "${DATA_KIEKER_DIR}"
+info "Prepare setup"
+
+if [ -d "${MODEL_DIR}" ] ; then
+	rm -rf "${MODEL_DIR}"
+fi
+
+for P in $MODEL_FILE_DIR $MODEL_MAP_DIR $MODEL_FILE_MAP_DIR $MODEL_FILE_INTERFACE_DIR $MODEL_MAP_INTERFACE_DIR $MODEL_FILE_MAP_INTERFACE_DIR ; do
+	mkdir -p "${P}"	
+done
+
+#
+# run experiment
+#
+info "Recover architecture"
+
+export DAR_OPTS="-Dlogback.configurationFile=${BASE_DIR}/logback.groovy"
+export MAA_OPTS="-Dlogback.configurationFile=${BASE_DIR}/logback.groovy"
+
+"${DAR_BIN}" -l dynamic -a "${ADDR2LINE_BIN}" -c -e "${UVIC_BIN}" -o "${MODEL_FILE_DIR}" -s elf -m file-mode -E ssp -i "${DATA_KIEKER_DIR}"
 "${BASE_DIR}/cleanup-model.sh" "${MODEL_FILE_DIR}"
 
-"${DAR_BIN}" -l dynamic -a "${ADDR2LINE_BIN}" -c -e  "${UVIC_BIN}" -o "${MODEL_MAP_DIR}" -s elf -ms , -m map-mode -M "${MAP_FILE}" -E ssp -i "${DATA_KIEKER_DIR}"
-"${BASE_DIR}/cleanup-model.sh" "${MODEL_DIR_DIR}"
+"${DAR_BIN}" -l dynamic -a "${ADDR2LINE_BIN}" -c -e "${UVIC_BIN}" -o "${MODEL_MAP_DIR}" -s elf -ms , -m map-mode -M "${MAP_FILE}" -E ssp -i "${DATA_KIEKER_DIR}"
+"${BASE_DIR}/cleanup-model.sh" "${MODEL_MAP _DIR}"
+
+info "Enhance architecture"
 
 "${MAA_BIN}" -s -I -i "${MODEL_MAP_DIR}" -c -o "${MODEL_MAP_INTERFACE_DIR}"
 "${BASE_DIR}/cleanup-model.sh" "${MODEL_FILE_DIR}"
@@ -63,18 +83,23 @@ checkDirectory data-kieker-directory "${DATA_KIEKER_DIR}"
 "${MAA_BIN}" -s -I -i "${MODEL_FILE_DIR}" -c -o "${MODEL_FILE_INTERFACE_DIR}" 
 "${BASE_DIR}/cleanup-model.sh" "${MODEL_FILE_INTERFACE_DIR}"
 
-"${MAA_BIN}" -s -g "${MAP_FILE}" -i "${MODEL_FILE_DIR}"  -c -o "${MODEL_FILE_MAP_DIR}"
+"${MAA_BIN}" -s -gs , -g "${MAP_FILE}" -i "${MODEL_FILE_DIR}" -c -o "${MODEL_FILE_MAP_DIR}"
 "${BASE_DIR}/cleanup-model.sh" "${MODEL_FILE_MAP_DIR}"
 
-"${MAA_BIN}" -s -I -i "${MODEL_FILE_MAP_DIR}"  -c -o "${MODEL_FILE_MAP_INTERFACE_DIR}"
+"${MAA_BIN}" -s -I -i "${MODEL_FILE_MAP_DIR}" -c -o "${MODEL_FILE_MAP_INTERFACE_DIR}"
 "${BASE_DIR}/cleanup-model.sh" "${MODEL_FILE_MAP_INTERFACE_DIR}"
 
+#
+# Finalize
+#
+
+info "Make models Eclipse project"
+
 for P in $MODEL_FILE_DIR $MODEL_MAP_DIR $MODEL_FILE_MAP_DIR $MODEL_FILE_INTERFACE_DIR $MODEL_MAP_INTERFACE_DIR $MODEL_FILE_MAP_INTERFACE_DIR ; do
-	if [ -d $P ] ; then
-		rm -rf $P
-	fi
 	NAME=`basename $P`
 	cat "${BASE_DIR}/.project.template" | sed "s/%NAME%/$NAME/g" > "${P}/.project"
 done
+
+info "Done"
 
 # end

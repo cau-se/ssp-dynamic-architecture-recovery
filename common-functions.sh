@@ -127,7 +127,7 @@ MODEL_MAP_DIR="${MODEL_DIR}/map"
 MODEL_FILE_MAP_DIR="${MODEL_DIR}/file-map"
 MODEL_FILE_INTERFACE_DIR="${MODEL_DIR}/file-interface"
 MODEL_MAP_INTERFACE_DIR="${MODEL_DIR}/map-interface"
-MODEL_FILE_MAP_INTERACE_DIR="${MODEL_DIR}/file-map-interface"
+MODEL_FILE_MAP_INTERFACE_DIR="${MODEL_DIR}/file-map-interface"
 
 MAP_FILE="${BASE_DIR}/module-file-function-map.csv"
 

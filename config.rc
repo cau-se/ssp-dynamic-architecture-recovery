@@ -1,7 +1,9 @@
 # basic configuration
 
-DAR_BIN="${BASE_DIR}/dar-1.3.0-SNAPSHOT"
-MAA_BIN="${BASE_DIR}/maa-1.3.0-SNAPSHOT"
+DAR_BIN="${BASE_DIR}/dar-1.3.0-SNAPSHOT/bin/dar"
+MAA_BIN="${BASE_DIR}/maa-1.3.0-SNAPSHOT/bin/maa"
+
+UVIC_BIN="${BASE_DIR}/UVic_ESCM"
 
 ADDR2LINE_BIN=`which addr2line`
 
