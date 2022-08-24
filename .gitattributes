@@ -1,1 +1,4 @@
 kieker-20220816-165500-2366367278757994-UTC--ssp-recovery.tgz filter=lfs diff=lfs merge=lfs -text
+maa-1.3.0-SNAPSHOT.tar filter=lfs diff=lfs merge=lfs -text
+dar-1.3.0-SNAPSHOT.tar filter=lfs diff=lfs merge=lfs -text
+UVic_ESCM filter=lfs diff=lfs merge=lfs -text
