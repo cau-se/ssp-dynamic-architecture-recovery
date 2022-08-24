@@ -1,0 +1,10 @@
+# basic configuration
+
+DAR_BIN="${BASE_DIR}/dar-1.3.0-SNAPSHOT"
+MAA_BIN="${BASE_DIR}/maa-1.3.0-SNAPSHOT"
+
+ADDR2LINE_BIN=`which addr2line`
+
+DATA_KIEKER_DIR="${DATA_DIR}/kieker-20220816-165500-2366367278757994-UTC--ssp-recovery"
+
+# end
